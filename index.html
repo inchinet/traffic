@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HK Bus Liquid Glass</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="background-overlay"></div>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="glass-panel header">
+            <div class="title">HK Bus 🚍</div>
+            <div class="datetime" id="datetime">Waiting...</div>
+        </header>
+
+        <!-- Navigation / Tabs -->
+        <nav class="glass-panel nav-bar">
+            <button class="nav-btn active" onclick="switchTab('nearby')">Nearby 📍</button>
+            <button class="nav-btn" onclick="switchTab('search')">Search 🔍</button>
+            <button class="nav-btn" onclick="switchTab('favorites')">Favs ❤️</button>
+        </nav>
+
+        <!-- Main Content Areas -->
+        <main id="main-content">
+
+            <!-- Nearby View -->
+            <section id="nearby" class="tab-content active">
+                <div class="status-message" id="nearby-status">Acquiring GPS...</div>
+                <div id="nearby-list" class="list-container"></div>
+            </section>
+
+            <!-- Search View -->
+            <section id="search" class="tab-content" style="display: none;">
+                <div class="search-bar">
+                    <input type="text" id="route-input" placeholder="Route (e.g. 68X)" class="glass-input">
+                    <button onclick="searchRoute()" class="glass-btn">Go</button>
+                </div>
+                <div id="search-results" class="list-container"></div>
+            </section>
+
+            <!-- Favorites View -->
+            <section id="favorites" class="tab-content" style="display: none;">
+                <div id="favorites-list" class="list-container">
+                    <div class="empty-msg">No favorites saved yet.</div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Footer / System Actions -->
+        <footer class="glass-panel footer">
+            <button onclick="updateDatabase()" class="action-btn" id="update-btn">🔄 Update Database</button>
+            <div class="db-status" id="db-status">DB: Not Loaded</div>
+        </footer>
+    </div>
+
+    <!-- Modal for ETA details -->
+    <div id="eta-modal" class="modal" style="display: none;">
+        <div class="glass-panel modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h2 id="modal-title">Bus Details</h2>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <script src="script.js?v=2"></script>
+</body>
+
+</html>
