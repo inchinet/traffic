@@ -10,6 +10,7 @@ let db = null;
 let currentTab = 'nearby';
 let cachedStops = []; // Memory cache for fast GPS lookup
 let userLocation = null;
+let isDBLoading = true; // Fix race condition
 
 // Clock
 function updateClock() {
@@ -70,6 +71,7 @@ async function checkDBData() {
         loadStopsToMemory();
     } else {
         dbStatus.textContent = "DB: Empty (Please Update)";
+        isDBLoading = false; // No data to load
     }
 }
 
@@ -89,6 +91,7 @@ function loadStopsToMemory() {
     const req = store.getAll();
     req.onsuccess = () => {
         cachedStops = req.result;
+        isDBLoading = false; // Loaded!
         console.log(`Loaded ${cachedStops.length} stops to memory`);
         // If we were waiting for GPS, trigger update
         if (currentTab === 'nearby' && userLocation) {
@@ -141,8 +144,8 @@ async function fetchWithFallback(url, label) {
 
 async function updateDatabase() {
     updateBtn.disabled = true;
-    updateBtn.textContent = "Initializing Update...";
-    dbStatus.textContent = "Starting update process...";
+    updateBtn.textContent = "Connecting...";
+    dbStatus.textContent = "Connecting to server...";
 
     let stats = { kmbStops: 0, kmbRoutes: 0, ctb: 0, nlb: 0 };
     let errors = [];
@@ -321,6 +324,11 @@ function startGPS() {
 }
 
 function updateNearbyList(coords) {
+    if (isDBLoading) {
+        nearbyList.innerHTML = '<div class="status-message">Loading database...</div>';
+        return;
+    }
+
     if (cachedStops.length === 0) {
         nearbyList.innerHTML = '<div class="empty-msg">Database empty. Please update database first.</div>';
         return;
@@ -575,7 +583,7 @@ async function showStopETA(stop) {
             for (const route in routes) {
                 // Skip routes with no valid ETAs
                 if (!routes[route] || routes[route].length === 0) continue;
-                
+
                 const nextBus = routes[route][0];
                 const dest = nextBus.dest || 'Unknown Destination';
                 const timeDiff = Math.abs(Math.round((new Date(nextBus.eta) - new Date()) / 60000));
