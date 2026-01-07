@@ -2,6 +2,9 @@
 
 A mobile-friendly, "Liquid Glass" styled web application for checking real-time bus arrival times in Hong Kong. Supports KMB, Citybus, and NLB.
 
+![Bus Predictor](https://github.com/inchinet/traffic/blob/main/traffic.png)
+
+
 ## Features
 
 - **Real-time Clock**: Displays current date and time.
