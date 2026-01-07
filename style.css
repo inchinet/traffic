@@ -1,5 +1,5 @@
 :root {
-    --glass-bg: rgba(255, 255, 255, 0.15);
+    --glass-bg: rgba(0, 0, 0, 0.5);
     --glass-border: rgba(255, 255, 255, 0.2);
     --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
     --text-primary: #ffffff;
@@ -106,7 +106,7 @@ main {
 }
 
 .bus-card {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.4);
     backdrop-filter: blur(5px);
     border-radius: 12px;
     padding: 15px;
