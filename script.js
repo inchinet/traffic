@@ -564,7 +564,8 @@ async function showStopETA(stop) {
         const routes = {};
         etas.forEach(e => {
             if (!routes[e.route]) routes[e.route] = [];
-            if (e.eta) routes[e.route].push(e);
+            // Only add ETAs that have both eta time AND destination info
+            if (e.eta && e.dest) routes[e.route].push(e);
         });
 
         let html = `<div style="max-height:400px; overflow-y:auto;">`;
@@ -572,8 +573,11 @@ async function showStopETA(stop) {
             html += '<div style="padding:20px; text-align:center;">No scheduled buses.</div>';
         } else {
             for (const route in routes) {
+                // Skip routes with no valid ETAs
+                if (!routes[route] || routes[route].length === 0) continue;
+                
                 const nextBus = routes[route][0];
-                const dest = nextBus.dest;
+                const dest = nextBus.dest || 'Unknown Destination';
                 const timeDiff = Math.abs(Math.round((new Date(nextBus.eta) - new Date()) / 60000));
                 // Bug fix: if negative, means departed or wrong timezone. API usually gives future.
                 const rawDiff = (new Date(nextBus.eta) - new Date()) / 60000;
