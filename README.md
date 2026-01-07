@@ -12,8 +12,9 @@ A mobile-friendly, "Liquid Glass" styled web application for checking real-time 
 - **Search**: Search for routes by number (e.g., 68X).
 - **Favorites**: Save frequently used stops or routes for quick access.
 - **ETA Information**: View the next 3 scheduled arrivals for a selected route.
-- **Offline Capable Database**: Caches Stop/Route data for performance (requires initial update).
-
+- **Offline Capable Database**: Caches Stop/Route data for performance (requires initial update). 
+  First time you open it, click the Update button to download the bus routes.
+  
 ## How to Run
 
 ### Option 1: GitHub Pages (Static Hosting)
