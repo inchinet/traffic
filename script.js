@@ -654,21 +654,25 @@ function loadFavorites() {
     favs.forEach(item => {
         const el = document.createElement('div');
         el.className = 'bus-card';
-        // Distinguish Route vs Stop
-        if (item.route && !item.lat) { // Route usually has no lat, Stop has
-            // It's a route
+        el.style.position = 'relative'; // Ensure absolute positioning works for child
+
+        // 1. Create content container (with padding for X button)
+        const contentDiv = document.createElement('div');
+        contentDiv.style.paddingRight = '40px'; // Make space for X button
+
+        // 2. Determine Content
+        if (item.route && !item.lat) { // Route
             el.onclick = () => showRouteStops(item);
-            el.innerHTML = `
+            contentDiv.innerHTML = `
                 <div class="bus-header">
                     <span class="route-num">★ ${item.route}</span>
                     <span class="dest-name">${item.dest_tc || item.company}</span>
                 </div>
                 <div style="font-size:0.8rem; color:#ccc;">${item.company} • Route</div>
             `;
-        } else {
-            // It's a stop
+        } else { // Stop
             el.onclick = () => showStopETA(item);
-            el.innerHTML = `
+            contentDiv.innerHTML = `
                 <div class="bus-header">
                     <span class="dest-name">★ ${item.name_tc || item.id}</span>
                     <span style="font-size:0.8rem">${item.code || ''}</span>
@@ -676,6 +680,40 @@ function loadFavorites() {
                 <div style="font-size:0.8rem; color:#aaa;">${item.name_en || ''}</div>
             `;
         }
+
+        // 3. Create Remove Button
+        const removeBtn = document.createElement('div');
+        removeBtn.innerHTML = '&#10005;'; // X sym
+        removeBtn.style.cssText = `
+            position: absolute;
+            top: 50%;
+            right: 15px;
+            transform: translateY(-50%);
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            z-index: 10;
+            border-radius: 50%;
+            transition: all 0.2s;
+        `;
+        // Hover effect
+        removeBtn.onmouseenter = () => { removeBtn.style.color = '#ff4444'; removeBtn.style.background = 'rgba(255,255,255,0.1)'; };
+        removeBtn.onmouseleave = () => { removeBtn.style.color = 'rgba(255, 255, 255, 0.5)'; removeBtn.style.background = 'transparent'; };
+        
+        removeBtn.onclick = (e) => {
+            e.stopPropagation(); // Stop card click
+            if(confirm('Remove this favorite?')) {
+                 toggleFavorite('delete', item);
+            }
+        };
+
+        el.appendChild(contentDiv);
+        el.appendChild(removeBtn);
         list.appendChild(el);
     });
 }
