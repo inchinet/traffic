@@ -550,19 +550,19 @@ async function showStopETA(stop) {
                 co: 'KMB'
             }));
         } else if (stop.company === 'CTB') {
-            const res = await fetchWithFallback(`https://rt.data.gov.hk/v2/transport/citybus/eta/CTB/${stop.code}`, 'CTB ETA');
+            const res = await fetchWithFallback(`https://rt.data.gov.hk/v1/transport/batch/stop-eta/CTB/${stop.code}`, 'CTB ETA');
             etas = res.data.map(e => ({
                 route: e.route,
-                dest: e.dest_tc,
+                dest: e.dest || e.dest_tc,
                 eta: e.eta,
                 co: 'CTB'
             }));
         } else if (stop.company === 'NLB') {
-            const res = await fetchWithFallback(`https://rt.data.gov.hk/v2/transport/nlb/stop-eta/${stop.code}`, 'NLB ETA');
-            etas = res.estimatedArrivals.map(e => ({
-                route: e.routeNo,
-                dest: e.destName_c || "TBC",
-                eta: e.estimatedArrivalTime,
+            const res = await fetchWithFallback(`https://rt.data.gov.hk/v1/transport/batch/stop-eta/NLB/${stop.code}`, 'NLB ETA');
+            etas = res.data.map(e => ({
+                route: e.route,
+                dest: e.dest || e.dest_tc,
+                eta: e.eta,
                 co: 'NLB'
             }));
         }
@@ -704,11 +704,11 @@ function loadFavorites() {
         // Hover effect
         removeBtn.onmouseenter = () => { removeBtn.style.color = '#ff4444'; removeBtn.style.background = 'rgba(255,255,255,0.1)'; };
         removeBtn.onmouseleave = () => { removeBtn.style.color = 'rgba(255, 255, 255, 0.5)'; removeBtn.style.background = 'transparent'; };
-        
+
         removeBtn.onclick = (e) => {
             e.stopPropagation(); // Stop card click
-            if(confirm('Remove this favorite?')) {
-                 toggleFavorite('delete', item);
+            if (confirm('Remove this favorite?')) {
+                toggleFavorite('delete', item);
             }
         };
 
