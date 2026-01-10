@@ -487,7 +487,7 @@ async function showRouteStops(route) {
                 }));
             }
         } else if (route.company === 'NLB') {
-            const res = await fetchWithFallback(`https://rt.data.gov.hk/v2/transport/nlb/route/${route.nlbId}/stop`, 'NLB Stops');
+            const res = await fetchWithFallback(`https://rt.data.gov.hk/v2/transport/nlb/stop.php?action=list&routeId=${route.nlbId}`, 'NLB Stops');
             stopList = res.stops.map(s => ({
                 id: s.stopId,
                 name_tc: s.stopName_c,
